@@ -32,6 +32,10 @@ class GameComponent {
   constructor(imagePath, x, y, width, height, context) {
     this.x = x;
     this.y = y;
+
+    this.speedX = 0;
+    this.speedY = 0;
+
     this.width = width;
     this.height = height;
 
@@ -39,6 +43,35 @@ class GameComponent {
     this.image.src = imagePath;
 
     this.context = context;
+  }
+
+  setPosition() {
+    this.x += this.speedX;
+    this.y += this.speedY;
+  }
+
+  move(direction) {
+    const actions = {
+      up: () => {
+        this.speedY = -1;
+      },
+      down: () => {
+        this.speedY = 1;
+      },
+      left: () => {
+        this.speedX = -1;
+      },
+      right: () => {
+        this.speedX = 1;
+      },
+      stop: () => {
+        this.speedX = 0;
+        this.speedY = 0;
+      },
+    };
+    actions[direction]();
+    
+    this.setPosition();
   }
 
   draw() {
@@ -59,7 +92,8 @@ function startGame() {
 
 function updateGame() {
   GAME_RUNTIME.clear();
-  for(const element of gameElements) {
+  for (const element of gameElements) {
+    // element.move("right"); // move the element to the right
     element.draw();
   }
 }
