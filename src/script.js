@@ -1,62 +1,67 @@
+const WORLD_BG = "./assets/scenes/world_bg.png";
+const PLAYER_IMG = "./assets/personas/persona_1.png";
+
+class GameEngine {
+  constructor() {
+    this.canvas = document.createElement("canvas");
+    this.canvas.width = 1280;
+    this.canvas.height = 720;
+    this.context = this.canvas.getContext("2d");
+    this.bgImage = new Image();
+    this.bgImage.src = WORLD_BG;
+  }
+
+  start() {
+    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    this.interval = setInterval(updateGame, 30);
+  }
+
+  clear() {
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.drawImage(
+      this.bgImage,
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    );
+  }
+}
+
+class GameComponent {
+  constructor(imagePath, x, y, width, height, context) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+
+    this.image = new Image();
+    this.image.src = imagePath;
+
+    this.context = context;
+  }
+
+  draw() {
+    this.context.drawImage(this.image, this.x, this.y, this.width, this.height);
+  }
+}
+
+const GAME_RUNTIME = new GameEngine();
+const gameElements = [];
 var myGamePiece;
 
 function startGame() {
-  myGamePiece = new component(30, 30, "red", 10, 120);
-  myGameArea.start();
+  GAME_RUNTIME.start();
+  gameElements.push(
+    new GameComponent(PLAYER_IMG, 30, 30, 160, 120, GAME_RUNTIME.context)
+  );
 }
 
-var myGameArea = {
-  canvas: document.createElement("canvas"),
-  start: function () {
-    this.canvas.width = 480;
-    this.canvas.height = 270;
-    this.context = this.canvas.getContext("2d");
-    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-    this.interval = setInterval(updateGameArea, 20);
-  },
-  clear: function () {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  },
-};
-
-function component(width, height, color, x, y) {
-  this.width = width;
-  this.height = height;
-  this.speedX = 0;
-  this.speedY = 0;
-  this.x = x;
-  this.y = y;
-  this.update = function () {
-    ctx = myGameArea.context;
-    ctx.fillStyle = color;
-    ctx.fillRect(this.x, this.y, this.width, this.height);
-  };
-  this.newPos = function () {
-    this.x += this.speedX;
-    this.y += this.speedY;
-
-    if (this.x > myGameArea.canvas.width) this.x = 0;
-  };
+function updateGame() {
+  GAME_RUNTIME.clear();
+  for(const element of gameElements) {
+    element.draw();
+  }
 }
 
-function updateGameArea() {
-  myGameArea.clear();
-  myGamePiece.newPos();
-  myGamePiece.update();
-}
-
-function moveup() {
-  myGamePiece.speedY -= 1;
-}
-
-function movedown() {
-  myGamePiece.speedY += 1;
-}
-
-function moveleft() {
-  myGamePiece.speedX -= 1;
-}
-
-function moveright() {
-  myGamePiece.speedX += 1;
-}
+startGame();
