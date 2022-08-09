@@ -1,0 +1,32 @@
+* {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: blue;
+}
+
+#game-content{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-canvas {
+    content: inherit;
+    width: 1280px;
+    height: 720px;
+    border: 1px solid black;
+    position: inherit;
+    background-image: url('assets/world_background.png');
+}
+
+.player {
+    width: 100px;
+    height: 100px;
+    background-color: aqua;
+    position: relative;
+    left: 70px;
+}
